@@ -1,5 +1,8 @@
 package pjavadoc.version1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Sección de gestión para el registro de vehículos
  *
@@ -16,7 +19,7 @@ public class Vivienda {
     private boolean cochera;
     private boolean piscina;
 
-
+    private static Map<String, Vivienda> registraViviendaMap = new HashMap<>();
     /**
      * Instantiates a new Vivienda.
      */
@@ -228,6 +231,25 @@ public class Vivienda {
                 ", cochera=" + cochera +
                 ", piscina=" + piscina +
                 '}';
+    }
+
+    public static boolean buscarVivienda(String mat) {
+        return registraViviendaMap.containsKey(mat);
+    }
+
+    public static boolean registrarVivienda(Vivienda vivienda){
+        if(!buscarVivienda(vivienda.getRefCatastral())){
+            registraViviendaMap.put(vivienda.getRefCatastral(),vivienda);
+            return true;
+        }
+        return false;
+    }
+
+    public static void listarViviendaRegistradas(){
+        for (Map.Entry<String, Vivienda> entrada : registraViviendaMap.entrySet()) {
+            Vivienda v = entrada.getValue();
+            System.out.println(v);
+        }
     }
 
 

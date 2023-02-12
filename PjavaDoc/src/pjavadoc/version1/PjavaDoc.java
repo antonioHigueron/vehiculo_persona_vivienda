@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import static pjavadoc.version1.Persona.listarPersonasRegistradas;
 import static pjavadoc.version1.Vehiculo.listarVehRegistrados;
+import static pjavadoc.version1.Vivienda.listarViviendaRegistradas;
 
 /**
  * Programa de registro de información estructurado en torno a tres alternativas
@@ -41,7 +42,7 @@ public class PjavaDoc {
      */
     public static String[] tipoVeh = {"turismo", "todoterreno", "sub", "comercial", "motocicleta", "ciclomotor", "agrícola", "camión", "autobús"};
 
-    //public static String[] tipoVivienda = {"APARTAMENTO", "LOFT", "PISO", "CASA"};
+    public static String[] tipoVivienda = {"APARTAMENTO", "LOFT", "PISO", "CASA"};
 
     /**
      * The entry point of application.
@@ -64,7 +65,7 @@ public class PjavaDoc {
                     registrarPersona();
                     break;
                 case "VIVIENDA":
-                    //registrarVivienda();
+                    registrarVivienda();
                     break;
                 case "0":
                     break;
@@ -86,6 +87,31 @@ public class PjavaDoc {
         }
     }
 
+    //---------------------------------------------------------------VIVIENDA
+    private static void registrarVivienda() {
+        String direccion, provincia, tipo, refCatastral;
+        double metros;
+        int cp;
+        boolean terraza, cochera, piscina;
+        direccion = getValue("Introduzca direccion:");
+        metros = getValueDouble("Inserte los metros");
+        cp = getValueInt("Introduzca codigo postal:");
+        provincia = getValue("Introduzca provincia");
+        tipo = getTipoVivienda();
+        refCatastral = getValue("Introduzca referencia catastral:");
+        terraza = getValueBoolean("Tiene terraza (S/N)");
+        cochera = getValueBoolean("Tiene cochera (S/N)");
+        piscina = getValueBoolean("Tiene piscina (S/N)");
+
+        Vivienda vivienda = new Vivienda(direccion, metros, cp, provincia, tipo,  refCatastral,terraza, cochera, piscina);
+        if (Vivienda.registrarVivienda(vivienda)) {
+            System.out.println("La vivienda ha sido registrada");
+        } else {
+            System.out.println("Error. La vivienda no ha sido registrada.");
+        }
+        listarViviendaRegistradas();
+    }
+
     //---------------------------------------------------------------PERSONA
     private static void registrarPersona() {
         String nombreApellidos, dni, profesion;
@@ -100,7 +126,7 @@ public class PjavaDoc {
         fechaNacimiento = getFechaNacimiento();
         telefono = getTelefono();
         profesion = getValue("Introduzca profesion");
-        altura = getValueDouble();
+        altura = getValueDouble("Inserte la altura");
         sexo = getSexo();
         salario = getValueInt("Introduzca salario");
         Persona persona = new Persona(nombreApellidos, edad, dni, fechaNacimiento, telefono, profesion, altura, sexo, salario);
@@ -112,13 +138,30 @@ public class PjavaDoc {
         listarPersonasRegistradas();
     }
 
-    private static char getSexo(){
+    private static char getSexo() {
         String valor;
         do {
             System.out.println("Ingrese el sexo, formato (H/M)");
             valor = entrada.nextLine();
-        }while(!IsChar(valor));
+        } while (!IsChar(valor));
         return valor.charAt(0);
+    }
+
+    private static boolean getValueBoolean(String x) {
+        String valor;
+        boolean bandera=true;
+        do {
+            System.out.println(x);
+            valor = entrada.nextLine();
+            if (valor.length()== 1 && (valor.equalsIgnoreCase("S") || valor.equalsIgnoreCase("N"))){
+                bandera = false;
+            }
+        } while (bandera);
+        if (valor.equalsIgnoreCase("s")){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public static boolean IsChar(String text) {
@@ -128,10 +171,11 @@ public class PjavaDoc {
             return false;
         }
     }
-    private static Double getValueDouble() {
+
+    private static Double getValueDouble(String x) {
         String valor;
         do {
-            System.out.println("Inserte la altura");
+            System.out.println(x);
             valor = entrada.nextLine();
         } while (!IsDouble(valor));
         return Double.valueOf(valor);
@@ -145,7 +189,6 @@ public class PjavaDoc {
             return false;
         }
     }
-
 
 
     private static long getTelefono() {
@@ -241,6 +284,20 @@ public class PjavaDoc {
                 System.out.println(textoError);
             }
         } while (validaTipoV(tipo));
+        return tipo;
+    }
+
+    private static String getTipoVivienda() {
+        String tipo;
+        do {
+            System.out.println("Introduzca tipo de vivienda: ");
+            System.out.println("Las opciones disponibles son: ");
+            bucleTipoVivienda();
+            tipo = entrada.nextLine();
+            if (!validaTipoVivienda(tipo)) {
+                System.out.println(textoError);
+            }
+        } while (!validaTipoVivienda(tipo));
         return tipo;
     }
 
@@ -342,10 +399,20 @@ public class PjavaDoc {
         }
     }
 
+    public static void bucleTipoVivienda() {
+        for (int i = 0; i < tipoVivienda.length; i++) {
+            if (i < tipoVivienda.length - 1) {
+                System.out.print(tipoVivienda[i] + ", ");
+            } else {
+                System.out.println(tipoVivienda[i] + ". ");
+            }
+        }
+    }
+
     /**
      * Valida tipo v boolean.
      *
-     * @param tipo  the tipo
+     * @param tipo the tipo
      * @return the boolean
      */
     public static boolean validaTipoV(String tipo) {
@@ -355,6 +422,15 @@ public class PjavaDoc {
             }
         }
         return true;
+    }
+
+    public static boolean validaTipoVivienda(String tipo) {
+        for (String s : tipoVivienda) {
+            if (s.equalsIgnoreCase(tipo)) {
+                return true;
+            }
+        }
+        return false;
     }
 //---------------------------------------------------------------------------
 }
