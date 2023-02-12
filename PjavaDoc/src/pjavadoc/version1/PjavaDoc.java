@@ -93,7 +93,7 @@ public class PjavaDoc {
         System.out.println("Las opciones disponibles son: ");
         bucleOpciones(opciones);
         System.out.println("Pulse 0 para salir");
-        option = entrada.next();
+        option = entrada.nextLine();
         if (validaOpcion(opciones, option)) {
             option = option.toUpperCase();
         }
@@ -131,7 +131,7 @@ public class PjavaDoc {
         char sexo;
         do {
             System.out.println("Ingrese el sexo, formato (H/M)");
-            valor = entrada.next();
+            valor = entrada.nextLine();
         }while(!IsChar(valor));
         return valor.charAt(0);
     }
@@ -154,7 +154,7 @@ public class PjavaDoc {
         String valor;
         do {
             System.out.println("Inserte la altura");
-            valor = entrada.next();
+            valor = entrada.nextLine();
         } while (!IsDouble(valor));
         return Double.valueOf(valor);
     }
@@ -175,7 +175,7 @@ public class PjavaDoc {
         String valor;
         do {
             System.out.println("Introduce numero de telefono");
-            valor = entrada.next();
+            valor = entrada.nextLine();
         } while (!IsLong(valor) && !validarLongitud(valor));
         return Long.valueOf(valor);
     }
@@ -269,7 +269,7 @@ public class PjavaDoc {
             System.out.println("Introduzca tipo de vehículo: ");
             System.out.println("Las opciones disponibles son: ");
             bucleTipoVeh(tipoVeh);
-            tipo = entrada.next();
+            tipo = entrada.nextLine();
             if (!validaTipoV(tipoVeh, tipo)) {
                 System.out.println(textoError);
             }
@@ -289,7 +289,6 @@ public class PjavaDoc {
     }
 
     private static String getValue(String x) {
-        entrada.nextLine();
         String valor;
         System.out.println(x);
         valor = entrada.nextLine();
@@ -300,7 +299,7 @@ public class PjavaDoc {
         String valor;
         do {
             System.out.println(x);
-            valor = entrada.next();
+            valor = entrada.nextLine();
         } while (!IsInteger(valor));
         return Integer.valueOf(valor);
     }
