@@ -22,18 +22,7 @@ public class PjavaDoc {
      * usuario introduce un valor válido para la variable opcion
      */
     public static String textoError = "La opción introducida no es válida. Por favor, introduzca una opción válida";
-    /**
-     * The constant opcionCorrecta.
-     */
-    public static boolean opcionCorrecta = false;
-    /**
-     * The constant matCorrecta.
-     */
-    public static boolean matCorrecta = false;
-    /**
-     * The constant tipoVCorrecto.
-     */
-    public static boolean tipoVCorrecto = false;
+
     /**
      * The constant entrada.
      */
@@ -46,15 +35,13 @@ public class PjavaDoc {
     /**
      * The constant opciones.
      */
-    public static String opciones[] = {"VIVIENDA", "VEHICULO", "PERSONA"};
+    public static String[] opciones = {"VIVIENDA", "VEHICULO", "PERSONA"};
     /**
      * The constant tipoVeh.
      */
-    public static String tipoVeh[] = {"turismo", "todoterreno", "sub", "comercial", "motocicleta", "ciclomotor", "agrícola", "camión", "autobús"};
-    /**
-     * The constant tipoVivienda.
-     */
-    public static String tipoVivienda[] = {"APARTAMENTO", "LOFT", "PISO", "CASA"};
+    public static String[] tipoVeh = {"turismo", "todoterreno", "sub", "comercial", "motocicleta", "ciclomotor", "agrícola", "camión", "autobús"};
+
+    //public static String[] tipoVivienda = {"APARTAMENTO", "LOFT", "PISO", "CASA"};
 
     /**
      * The entry point of application.
@@ -102,7 +89,7 @@ public class PjavaDoc {
     //---------------------------------------------------------------PERSONA
     private static void registrarPersona() {
         String nombreApellidos, dni, profesion;
-        Character sexo;
+        char sexo;
         double altura;
         int edad, salario;
         long telefono;
@@ -116,7 +103,6 @@ public class PjavaDoc {
         altura = getValueDouble();
         sexo = getSexo();
         salario = getValueInt("Introduzca salario");
-        //Persona persona = new Persona(marca, modelo, matricula, tipo, anyos, color);
         Persona persona = new Persona(nombreApellidos, edad, dni, fechaNacimiento, telefono, profesion, altura, sexo, salario);
         if (Persona.registrarPersona(persona)) {
             System.out.println("La persona ha sido registrada");
@@ -128,7 +114,6 @@ public class PjavaDoc {
 
     private static char getSexo(){
         String valor;
-        char sexo;
         do {
             System.out.println("Ingrese el sexo, formato (H/M)");
             valor = entrada.nextLine();
@@ -137,15 +122,8 @@ public class PjavaDoc {
     }
 
     public static boolean IsChar(String text) {
-        char v;
         try {
-            if(text.length()==1 && (text.equalsIgnoreCase("H") || text.equalsIgnoreCase("M"))){
-                v = text.charAt(0);
-            }else{
-                return false;
-            }
-
-            return true;
+            return text.length() == 1 && (text.equalsIgnoreCase("H") || text.equalsIgnoreCase("M"));
         } catch (Exception ex) {
             return false;
         }
@@ -160,9 +138,8 @@ public class PjavaDoc {
     }
 
     public static boolean IsDouble(String text) {
-        double v;
         try {
-            v = Double.parseDouble(text);
+            Double.parseDouble(text);
             return true;
         } catch (Exception ex) {
             return false;
@@ -177,14 +154,11 @@ public class PjavaDoc {
             System.out.println("Introduce numero de telefono");
             valor = entrada.nextLine();
         } while (!IsLong(valor) && !validarLongitud(valor));
-        return Long.valueOf(valor);
+        return Long.parseLong(valor);
     }
 
     private static boolean validarLongitud(String telefono) {
-        if (telefono.length() == 13) {
-            return true;
-        }
-        return false;
+        return telefono.length() == 13;
     }
 
 
@@ -203,8 +177,7 @@ public class PjavaDoc {
         for (int i = 0; i < datos.length; i++) {
             datos[i] = Integer.parseInt(fechaArray[i]);
         }
-        Date date = new Date(datos[0], datos[1], datos[2]);
-        return date;
+        return new Date(datos[0], datos[1], datos[2]);
     }
 
     private static boolean validaFecha(String fecha) {
@@ -213,13 +186,10 @@ public class PjavaDoc {
             String dia = data[0];
             String mes = data[1];
             String anyo = data[2];
-            if(data.length > 3
-                    || !IsInteger(dia) || Integer.valueOf(dia) <1 || Integer.valueOf(dia) >31
-                    || !IsInteger(mes) || Integer.valueOf(mes) <1 || Integer.valueOf(mes) >12
-                    || !IsInteger(anyo)|| Integer.valueOf(anyo) >2023    ){
-                return false;
-            }
-            return true;
+            return data.length <= 3
+                    && IsInteger(dia) && Integer.parseInt(dia) >= 1 && Integer.parseInt(dia) <= 31
+                    && IsInteger(mes) && Integer.parseInt(mes) >= 1 && Integer.parseInt(mes) <= 12
+                    && IsInteger(anyo) && Integer.parseInt(anyo) <= 2023;
         }
         return false;
     }
@@ -238,10 +208,7 @@ public class PjavaDoc {
     }
 
     private static boolean validaDni(String dni) {
-        if (dni.length() == 9) {
-            return true;
-        }
-        return false;
+        return dni.length() == 9;
     }
 
     //--------------------------------------------------------------------------------VEHICULO
@@ -270,10 +237,10 @@ public class PjavaDoc {
             System.out.println("Las opciones disponibles son: ");
             bucleTipoVeh(tipoVeh);
             tipo = entrada.nextLine();
-            if (!validaTipoV(tipoVeh, tipo)) {
+            if (validaTipoV(tipo)) {
                 System.out.println(textoError);
             }
-        } while (!validaTipoV(tipoVeh, tipo));
+        } while (validaTipoV(tipo));
         return tipo;
     }
 
@@ -281,10 +248,10 @@ public class PjavaDoc {
         String matricula;
         do {
             matricula = getValue("Introduzca matricula del vehículo:");
-            if (!validaMatricula(matricula)) {
+            if (validaMatricula(matricula)) {
                 System.out.println(textoError);
             }
-        } while (!validaMatricula(matricula));
+        } while (validaMatricula(matricula));
         return matricula;
     }
 
@@ -301,13 +268,12 @@ public class PjavaDoc {
             System.out.println(x);
             valor = entrada.nextLine();
         } while (!IsInteger(valor));
-        return Integer.valueOf(valor);
+        return Integer.parseInt(valor);
     }
 
     public static boolean IsInteger(String text) {
-        int v;
         try {
-            v = Integer.parseInt(text);
+            Integer.parseInt(text);
             return true;
         } catch (Exception ex) {
             return false;
@@ -315,9 +281,8 @@ public class PjavaDoc {
     }
 
     public static boolean IsLong(String text) {
-        long v;
         try {
-            v = Long.valueOf(text);
+            Long.valueOf(text);
             return true;
         } catch (Exception ex) {
             return false;
@@ -333,8 +298,8 @@ public class PjavaDoc {
      * @return true si el valor introducido por el usuario es válido o false si no lo es.
      */
     public static boolean validaOpcion(String[] opciones, String option) {
-        for (int i = 0; i < opciones.length; i++) {
-            if (opciones[i].equalsIgnoreCase(option)) {
+        for (String opcione : opciones) {
+            if (opcione.equalsIgnoreCase(option)) {
                 return true;
             }
         }
@@ -347,8 +312,8 @@ public class PjavaDoc {
      * @param opciones the opciones
      */
     public static void bucleOpciones(String[] opciones) {
-        for (int i = 0; i < opciones.length; i++) {
-            System.out.println(opciones[i]);
+        for (String opcione : opciones) {
+            System.out.println(opcione);
         }
     }
 
@@ -359,10 +324,7 @@ public class PjavaDoc {
      * @return the boolean
      */
     public static boolean validaMatricula(String matr) {
-        if (matr.length() >= 7 && matr.length() <= 8) {
-            return true;
-        }
-        return false;
+        return matr.length() < 7 || matr.length() > 8;
     }
 
     /**
@@ -383,17 +345,16 @@ public class PjavaDoc {
     /**
      * Valida tipo v boolean.
      *
-     * @param tipoV the tipo v
      * @param tipo  the tipo
      * @return the boolean
      */
-    public static boolean validaTipoV(String[] tipoV, String tipo) {
-        for (int i = 0; i < tipoVeh.length; i++) {
-            if (tipoVeh[i].equalsIgnoreCase(tipo)) {
-                return true;
+    public static boolean validaTipoV(String tipo) {
+        for (String s : tipoVeh) {
+            if (s.equalsIgnoreCase(tipo)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 //---------------------------------------------------------------------------
 }
