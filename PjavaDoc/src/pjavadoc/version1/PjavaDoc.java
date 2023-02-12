@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
-package pjavadoc.completo;
+package pjavadoc.version1;
 
 
 import java.util.Date;
 import java.util.Scanner;
 
-import static pjavadoc.completo.Vehiculo.listarVehRegistrados;
+import static pjavadoc.version1.Persona.listarPersonasRegistradas;
+import static pjavadoc.version1.Vehiculo.listarVehRegistrados;
 
 /**
  * Programa de registro de información estructurado en torno a tres alternativas
@@ -41,6 +38,7 @@ public class PjavaDoc {
      * The constant entrada.
      */
     public static Scanner entrada = new Scanner(System.in);
+
     /**
      * The constant option.
      */
@@ -106,7 +104,8 @@ public class PjavaDoc {
         String nombreApellidos, dni, profesion;
         Character sexo;
         double altura;
-        int edad, telefono, salario;
+        int edad, salario;
+        long telefono;
         Date fechaNacimiento;
         nombreApellidos = getValue("Introduzca nombre y apellidos:");
         edad = getValueInt("Introduzca edad:");
@@ -124,7 +123,7 @@ public class PjavaDoc {
         } else {
             System.out.println("Error. La persona no ha sido registrada.");
         }
-        //listarPersonasRegistradas();
+        listarPersonasRegistradas();
     }
 
     private static char getSexo(){
@@ -140,11 +139,12 @@ public class PjavaDoc {
     public static boolean IsChar(String text) {
         char v;
         try {
-            if(text.length()==1){
+            if(text.length()==1 && (text.equalsIgnoreCase("H") || text.equalsIgnoreCase("M"))){
                 v = text.charAt(0);
             }else{
                 return false;
             }
+
             return true;
         } catch (Exception ex) {
             return false;
@@ -171,13 +171,13 @@ public class PjavaDoc {
 
 
 
-    private static int getTelefono() {
+    private static long getTelefono() {
         String valor;
         do {
             System.out.println("Introduce numero de telefono");
             valor = entrada.next();
-        } while (!IsInteger(valor) && !validarLongitud(valor));
-        return Integer.valueOf(valor);
+        } while (!IsLong(valor) && !validarLongitud(valor));
+        return Long.valueOf(valor);
     }
 
     private static boolean validarLongitud(String telefono) {
@@ -199,7 +199,7 @@ public class PjavaDoc {
             }
         } while (!validado);
         String[] fechaArray = fecha.split("/");
-        int[] datos = new int[2];
+        int[] datos = new int[3];
         for (int i = 0; i < datos.length; i++) {
             datos[i] = Integer.parseInt(fechaArray[i]);
         }
@@ -210,10 +210,14 @@ public class PjavaDoc {
     private static boolean validaFecha(String fecha) {
         if (fecha.contains("/")) {
             String[] data = fecha.split("/");
-            for (int i = 0; i <= data.length; i++) {
-                if (!IsInteger(data[i]) || (data[i].length() != 2 || data[i].length() != 4)) {
-                    return false;
-                }
+            String dia = data[0];
+            String mes = data[1];
+            String anyo = data[2];
+            if(data.length > 3
+                    || !IsInteger(dia) || Integer.valueOf(dia) <1 || Integer.valueOf(dia) >31
+                    || !IsInteger(mes) || Integer.valueOf(mes) <1 || Integer.valueOf(mes) >12
+                    || !IsInteger(anyo)|| Integer.valueOf(anyo) >2023    ){
+                return false;
             }
             return true;
         }
@@ -285,9 +289,10 @@ public class PjavaDoc {
     }
 
     private static String getValue(String x) {
+        entrada.nextLine();
         String valor;
         System.out.println(x);
-        valor = entrada.next();
+        valor = entrada.nextLine();
         return valor;
     }
 
@@ -304,6 +309,16 @@ public class PjavaDoc {
         int v;
         try {
             v = Integer.parseInt(text);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public static boolean IsLong(String text) {
+        long v;
+        try {
+            v = Long.valueOf(text);
             return true;
         } catch (Exception ex) {
             return false;

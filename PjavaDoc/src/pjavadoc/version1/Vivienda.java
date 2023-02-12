@@ -1,4 +1,4 @@
-package pjavadoc.completo;
+package pjavadoc.version1;
 
 /**
  * Sección de gestión para el registro de vehículos

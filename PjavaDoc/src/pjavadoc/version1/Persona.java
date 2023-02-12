@@ -1,4 +1,4 @@
-package pjavadoc.completo;
+package pjavadoc.version1;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class Persona {
     private int edad;
     private String dni; //controlar que tenga 9 caracteres
     private Date fechaNacimiento;
-    private int telefono;//longitud 13 caracteres
+    private long telefono;//longitud 13 caracteres
     private String profesion;
     private double altura;
     private char sexo; // H Hombre | M Mujer
@@ -42,7 +42,7 @@ public class Persona {
      * @param sexo            the sexo
      * @param salario         the salario
      */
-    public Persona(String nomApe, int edad, String dni, Date fechaNacimiento, int telefono, String profesion, double altura, char sexo, int salario) {
+    public Persona(String nomApe, int edad, String dni, Date fechaNacimiento,long telefono, String profesion, double altura, char sexo, int salario) {
         this.nomApe = nomApe;
         this.edad = edad;
         this.dni = dni;
@@ -126,21 +126,11 @@ public class Persona {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    /**
-     * Gets telefono.
-     *
-     * @return the telefono
-     */
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    /**
-     * Sets telefono.
-     *
-     * @param telefono the telefono
-     */
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
@@ -230,7 +220,7 @@ public class Persona {
                 ", fechaNacimiento=" + fechaNacimiento +
                 ", telefono=" + telefono +
                 ", profesion='" + profesion + '\'' +
-                ", altura=" + altura +
+                ", altura=" + altura +" cm"+
                 ", sexo=" + sexo +
                 ", salario=" + salario +
                 '}';
@@ -249,6 +239,12 @@ public class Persona {
         return false;
     }
 
+    public static void listarPersonasRegistradas(){
+        for (Map.Entry<String, Persona> entrada : registraPersonaMap.entrySet()) {
+            Persona p = entrada.getValue();
+            System.out.println(p);
+        }
+    }
 
 
 
